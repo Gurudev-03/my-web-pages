@@ -1,17 +1,442 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>CI/CD Project</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CI/CD Cloud Deployment</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #60a5fa;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(96, 165, 250, 0.15);
+            border: 1px solid #60a5fa;
+            padding: 10px 20px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            color: #bfdbfe;
+        }
+
+        .hero h1 {
+            font-size: 60px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #60a5fa;
+        }
+
+        .hero p {
+            font-size: 20px;
+            line-height: 1.7;
+            color: #dbeafe;
+            margin-bottom: 35px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #60a5fa;
+            transform: translateY(-3px);
+        }
+
+        .secondary {
+            border: 1px solid #93c5fd;
+            color: white;
+        }
+
+        .secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Pipeline */
+        .section {
+            padding: 70px 8%;
+            text-align: center;
+        }
+
+        .section h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .section > p {
+            color: #bfdbfe;
+            margin-bottom: 40px;
+            font-size: 17px;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 30px 20px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #dbeafe;
+            line-height: 1.5;
+        }
+
+        /* Status */
+        .status-section {
+            padding: 70px 8%;
+            text-align: center;
+        }
+
+        .status-box {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #22c55e;
+        }
+
+        .status-box p {
+            color: #dbeafe;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #bfdbfe;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .pipeline {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>Welcome to My CI/CD Project</h1>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            CI<span>/</span>CD Cloud
+        </div>
 
-    <h2>Continuous Integration and Continuous Deployment</h2>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#pipeline">Pipeline</a></li>
+            <li><a href="#status">Status</a></li>
+        </ul>
+    </nav>
 
-    <p>This website is deployed automatically using GitHub Actions.</p>
 
-    <p>GitHub → GitHub Actions → GitHub Pages</p>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                🚀 Cloud-Based CI/CD Project
+            </div>
+
+            <h1>
+                Continuous Integration
+                <br>
+                & <span>Continuous Deployment</span>
+            </h1>
+
+            <p>
+                A modern CI/CD pipeline that automatically builds,
+                tests and deploys a web application using
+                GitHub Actions and GitHub Pages.
+            </p>
+
+            <div class="buttons">
+
+                <a href="#pipeline" class="btn primary">
+                    Explore Pipeline
+                </a>
+
+                <a href="#status" class="btn secondary">
+                    View Status
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Pipeline Section -->
+    <section class="section" id="pipeline">
+
+        <h2>⚡ CI/CD Pipeline</h2>
+
+        <p>
+            From source code to a live website automatically.
+        </p>
+
+        <div class="pipeline">
+
+            <div class="card">
+                <div class="icon">💻</div>
+
+                <h3>1. Code</h3>
+
+                <p>
+                    Developer creates and updates the
+                    application source code.
+                </p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">📦</div>
+
+                <h3>2. GitHub</h3>
+
+                <p>
+                    Source code is stored safely in
+                    a GitHub repository.
+                </p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">⚙️</div>
+
+                <h3>3. Actions</h3>
+
+                <p>
+                    GitHub Actions automatically builds
+                    and tests the application.
+                </p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">🌐</div>
+
+                <h3>4. Deploy</h3>
+
+                <p>
+                    The tested website is automatically
+                    deployed to GitHub Pages.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Status Section -->
+    <section class="status-section" id="status">
+
+        <div class="status-box">
+
+            <div class="status">
+                <span class="dot"></span>
+                CI/CD Pipeline Successful
+            </div>
+
+            <h2>🎉 Deployment Completed!</h2>
+
+            <p>
+                This website is automatically deployed using
+                GitHub Actions and hosted on GitHub Pages.
+                Every change pushed to the main branch can
+                trigger the CI/CD pipeline automatically.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            Built for <strong>CI/CD Cloud Platform Experiment</strong>
+        </p>
+
+        <p>
+            GitHub → GitHub Actions → GitHub Pages
+        </p>
+
+    </footer>
 
 </body>
+
 </html>
