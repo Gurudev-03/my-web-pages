@@ -1,2 +1,2 @@
-print("Hello from CI/CD Pipeline!")
-print("Application executed successfully.")
+print("Running CI/CD application...")
+print("Application executed successfully!")
